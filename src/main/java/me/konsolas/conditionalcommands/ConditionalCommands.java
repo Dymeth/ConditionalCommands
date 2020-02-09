@@ -60,7 +60,7 @@ public class ConditionalCommands extends JavaPlugin {
         // Get the player
         Player placeholderFor = Bukkit.getPlayer(args[0]);
         if (placeholderFor == null || !placeholderFor.isOnline()) {
-            sender.sendMessage((player ? ChatColor.GOLD : "") + "[ConditionalCommands] > Not dispatching command because " + args[0] + " is not online...");
+            if (getConfig().getBoolean("dev")) sender.sendMessage((player ? ChatColor.GOLD : "") + "[ConditionalCommands] > Not dispatching command because " + args[0] + " is not online...");
             return true;
         }
 
@@ -127,14 +127,14 @@ public class ConditionalCommands extends JavaPlugin {
                 if (!expression.evaluate()) {
                     dispatchCommand(sender, command.toString());
                 } else {
-                    sender.sendMessage((player ? ChatColor.GOLD : "") + "[ConditionalCommands] > Not dispatching command because \"" + args[2] + "\" evaluated to true");
+                    if (getConfig().getBoolean("dev")) sender.sendMessage((player ? ChatColor.GOLD : "") + "[ConditionalCommands] > Not dispatching command because \"" + args[2] + "\" evaluated to true");
                 }
                 break;
             case "if":
                 if (expression.evaluate()) {
                     dispatchCommand(sender, command.toString());
                 } else {
-                    sender.sendMessage((player ? ChatColor.GOLD : "") + "[ConditionalCommands] > Not dispatching command because \"" + args[2] + "\" evaluated to false");
+                    if (getConfig().getBoolean("dev")) sender.sendMessage((player ? ChatColor.GOLD : "") + "[ConditionalCommands] > Not dispatching command because \"" + args[2] + "\" evaluated to false");
                 }
                 break;
             default:
@@ -192,7 +192,7 @@ public class ConditionalCommands extends JavaPlugin {
     private void protectedDispatch(CommandSender sender, String command) {
         boolean player = (sender instanceof Player);
         try {
-            sender.sendMessage((player ? ChatColor.GOLD : "") + "[ConditionalCommands] > Dispatching command \"" + command + "\"");
+            if (getConfig().getBoolean("dev")) sender.sendMessage((player ? ChatColor.GOLD : "") + "[ConditionalCommands] > Dispatching command \"" + command + "\"");
             this.getServer().dispatchCommand(sender, command);
         } catch (CommandException ex) {
             if (getConfig().getBoolean("dev")) {
